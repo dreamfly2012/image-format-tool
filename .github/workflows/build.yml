@@ -40,7 +40,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: target/release/image-format-tool.exe
+        file:  D:\a\image-format-tool\image-format-tool\dist\app.exe
         asset_name: image-format-tool.exe
         tag: ${{ github.ref }}
         overwrite: true
@@ -79,7 +79,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: target/release/image-format-tool
+        file: /home/runner/work/image-format-tool/image-format-tool/dist/app
         asset_name: image-format-tool
         tag: ${{ github.ref }}
         overwrite: true
