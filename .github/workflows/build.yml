@@ -30,6 +30,16 @@ jobs:
     - name: Build Windows executable
       run: |
         pyinstaller --onefile app.py
+    
+    - name: Upload executable to Releases
+      id: upload-release-assets
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: dist/app.exe  # 替换为你的可执行文件路径
+        asset_name: app.exe  # 可执行文件的名称
+        asset_content_type: application/octet-stream
+        token: ${{ secrets.GITHUB_TOKEN }}  # GitHub 提供的默认 token
 
   build_linux:
     runs-on: ubuntu-latest  # 在 Linux 环境下运行
@@ -54,3 +64,13 @@ jobs:
     - name: Build Linux executable
       run: |
         pyinstaller --onefile app.py
+    
+    - name: Upload executable to Releases
+      id: upload-release-assets
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: dist/app  # 替换为你的可执行文件路径
+        asset_name: app  # 可执行文件的名称
+        asset_content_type: application/octet-stream
+        token: ${{ secrets.GITHUB_TOKEN }}  # GitHub 提供的默认 token
