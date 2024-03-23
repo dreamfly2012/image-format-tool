@@ -32,11 +32,18 @@ jobs:
         pyinstaller --onefile app.py
     
     - name: Upload to release
-      uses: JasonEtco/upload-to-release@master
+      # uses: JasonEtco/upload-to-release@master
+      # with:
+      #   args: app.exe application/octet-stream
+      # env:
+      #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: svenstaro/upload-release-action@v2
       with:
-        args: app.exe application/octet-stream
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: target/release/image-format-tool.exe
+        asset_name: image-format-tool.exe
+        tag: ${{ github.ref }}
+        overwrite: true
 
   build_linux:
     runs-on: ubuntu-latest  # 在 Linux 环境下运行
@@ -63,8 +70,16 @@ jobs:
         pyinstaller --onefile app.py
     
     - name: Upload to release
-      uses: JasonEtco/upload-to-release@master
+      # uses: JasonEtco/upload-to-release@master
+      # with:
+      #   args: app application/octet-stream
+      # env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      uses: svenstaro/upload-release-action@v2
       with:
-        args: app application/octet-stream
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: target/release/image-format-tool
+        asset_name: image-format-tool
+        tag: ${{ github.ref }}
+        overwrite: true
