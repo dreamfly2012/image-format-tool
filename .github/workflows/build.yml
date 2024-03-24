@@ -81,4 +81,11 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         files: dist/app
+        tag_name: v1.0.0  # 标签名称，可根据需要更改
+        draft: false
+        prerelease: false
+
+    
+
+  
       
