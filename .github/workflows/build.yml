@@ -6,52 +6,52 @@ on:
       - main  # 触发主分支的提交事件
 
 jobs:
-  build_windows:
-    runs-on: windows-latest  # 在 Windows 环境下运行
+  # build_windows:
+  #   runs-on: windows-latest  # 在 Windows 环境下运行
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2  # 检出代码到工作环境
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v2  # 检出代码到工作环境
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'  # 设置 Python 版本
+  #   - name: Set up Python
+  #     uses: actions/setup-python@v2
+  #     with:
+  #       python-version: '3.x'  # 设置 Python 版本
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt  # 安装依赖，确保 requirements.txt 中包含 tkinter 依赖
+  #   - name: Install dependencies
+  #     run: |
+  #       python -m pip install --upgrade pip
+  #       pip install -r requirements.txt  # 安装依赖，确保 requirements.txt 中包含 tkinter 依赖
     
-    - name: Install PyInstaller
-      run: 
-        pip install pyinstaller
+  #   - name: Install PyInstaller
+  #     run: 
+  #       pip install pyinstaller
 
-    - name: Build Windows executable
-      run: |
-        pyinstaller --onefile app.py
+  #   - name: Build Windows executable
+  #     run: |
+  #       pyinstaller --onefile app.py
     
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}  # 使用默认的 GitHub token
-      with:
-        tag_name: v1.0.0  # 标签名称，可根据需要更改
-        release_name: Release v1.0.0  # 发布名称，可根据需要更改
-        draft: false
-        prerelease: false
+  #   - name: Create Release
+  #     id: create_release
+  #     uses: actions/create-release@v1
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}  # 使用默认的 GitHub token
+  #     with:
+  #       tag_name: v1.0.0  # 标签名称，可根据需要更改
+  #       release_name: Release v1.0.0  # 发布名称，可根据需要更改
+  #       draft: false
+  #       prerelease: false
       
-    - name: Upload executable to Releases
-      id: upload-release-assets
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}  # 使用默认的 GitHub token
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/app.exe
-        asset_name: app.exe
-        asset_content_type: application/octet-stream
+  #   - name: Upload executable to Releases
+  #     id: upload-release-assets
+  #     uses: actions/upload-release-asset@v1
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}  # 使用默认的 GitHub token
+  #     with:
+  #       upload_url: ${{ steps.create_release.outputs.upload_url }}
+  #       asset_path: dist/app.exe
+  #       asset_name: app.exe
+  #       asset_content_type: application/octet-stream
 
   build_linux:
     runs-on: ubuntu-latest  # 在 Linux 环境下运行
@@ -77,25 +77,9 @@ jobs:
       run: |
         pyinstaller --onefile app.py
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}  # 使用默认的 GitHub token
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/')
       with:
-        tag_name: v1.0.0  # 标签名称，可根据需要更改
-        release_name: Release v1.0.0  # 发布名称，可根据需要更改
-        draft: false
-        prerelease: false
-    
-    - name: Upload executable to Releases
-      id: upload-release-assets
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}  # 使用默认的 GitHub token
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/app
-        asset_name: app
-        asset_content_type: application/octet-stream
+        files: dist/app
       
